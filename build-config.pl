@@ -4,7 +4,7 @@ use strict;
 use vars qw($VERSION $NAME);
 use Getopt::Long;
 
-$VERSION = '0.10';
+$VERSION = '0.11';
 $NAME = 'build config';
 
 my %o;
