@@ -4,7 +4,7 @@ use strict;
 use vars qw($VERSION $NAME);
 use Getopt::Long;
 
-$VERSION = '0.09';
+$VERSION = '0.10';
 $NAME = 'build config';
 
 my %o;
@@ -56,7 +56,7 @@ sub parse_conf {
 	chomp;
         # identifier and level parsing
         if (/^\Q#$/) { 	
-            chomp( my $line2 = <>); 
+            chomp( my $line2 = <> ); 
 	    
             ($level_ident, my $level_value) = split '=';
             ($ident, my $value) = split '=', $line2; 
@@ -99,7 +99,7 @@ __END__
 
 =head1 NAME
 
-build config - Converts a subsectional divided configuration to hash strings
+build-config - convert a subsectional configuration to hash strings
 
 =head1 SYNOPSIS
 
@@ -269,18 +269,3 @@ subsequent level identifiers.
  Value:                              /etc/master.passwd
 
 =back
-
-=head1 SEE ALSO
-
-perl(1)
-
-=head1 LICENSE
-
-This program is free software; you may redistribute it 
-and/or modify it under the same terms as Perl itself.
-
-=head1 AUTHOR
-
-Steven Schubiger
-
-=cut
