@@ -4,7 +4,7 @@ use strict;
 use vars qw($VERSION $NAME);
 use Getopt::Long;
 
-$VERSION = '0.08';
+$VERSION = '0.09';
 $NAME = 'build config';
 
 my %o;
@@ -18,7 +18,7 @@ sub parse_args {
     
     GetOptions(\%o, 'h', 't=s', 'V') or $o{'h'} = 1;
     
-    if (!(@ARGV || %o) || ($o{'t'} && !$ARGV[0])) {
+    if (not (@ARGV || %o) || ($o{'t'} && not $ARGV[0])) {
         $o{'h'} = 1;
     }	
 
@@ -49,20 +49,20 @@ sub parse_conf {
         $ident,
         $level_ident);
 	
-    $o{'t'} =~ s{\W}{}g;
+    $o{'t'} =~ s/\W//g;
     
     while (<>) {
-        next unless /^\Q#$/ || m#^\w+#;
+        next unless /^\Q#$/ || /^\w+/;
 	chomp;
         # identifier and level parsing
         if (/^\Q#$/) { 	
-            chomp(my $line2 = <>); 
+            chomp( my $line2 = <>); 
 	    
             ($level_ident, my $level_value) = split '=';
             ($ident, my $value) = split '=', $line2; 
 	    
-            $level_ident = substr($level_ident, 2, length $level_ident);
-            $ident = substr($ident, 2, length $ident);
+            $level_ident = substr( $level_ident, 2, length $level_ident );
+            $ident = substr( $ident, 2, length $ident );
 	     
             for (my $i = $level_value; exists $conf_set{$level_ident}{$i}{$ident}; $i++) {
                 delete $conf_set{$level_ident}{$i}{$ident};
@@ -70,7 +70,7 @@ sub parse_conf {
             $conf_set{$level_ident}{$level_value}{$ident} = $value;
         }
         # output hash string
-        elsif (m#^\w+#) {
+        elsif (/^\w+/) {
             $o{'t'} 
 	      ? print qq~\$$o{'t'}~    
               : print q~$Data{config}~;
@@ -79,9 +79,10 @@ sub parse_conf {
                 print qq~{$conf_set{$level_ident}{$i}{$ident}}~;
             }
 	    
-            my($ident_conf, $value_conf) = split ' = ';
+            my ($ident_conf, $value_conf) = split ' = ';
 	    
-            print qq~{$ident_conf} =~;    
+            print qq~{$ident_conf} =~;
+	        
             $value_conf =~ /\'/ 
 	      ? print qq~"$value_conf";\n~
               : print qq~'$value_conf';\n~;
@@ -98,12 +99,7 @@ __END__
 
 =head1 NAME
 
-build config
-
-=head1 DESCRIPTION
-
-Parses a subsectional divided configuration file and 
-converts its configuration to hash strings.
+build config - Converts a subsectional divided configuration to hash strings
 
 =head1 SYNOPSIS
 
@@ -280,7 +276,8 @@ perl(1)
 
 =head1 LICENSE
 
-This program is free software; you may redistribute it and/or modify it under the same terms as Perl itself.
+This program is free software; you may redistribute it 
+and/or modify it under the same terms as Perl itself.
 
 =head1 AUTHOR
 
